@@ -1,6 +1,6 @@
 const express = require("express");
 const cors = require("cors");
-const { MongoClient, ServerApiVersion } = require("mongodb");
+const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 require("dotenv").config();
 
 const app = express();
@@ -41,18 +41,38 @@ async function run() {
 
     app.post("/craft", async (req, res) => {
       const newCraft = req.body;
-      console.log(newCraft);
       const result = await craftCollection.insertOne(newCraft);
       res.send(result);
     });
 
     app.get("/craft/:email", async (req, res) => {
-      console.log(req.params.email);
       const result = await craftCollection
         .find({ email: req.params.email })
         .toArray();
       res.send(result);
     });
+
+    app.get("/singleCraft/:id", async (req, res) => {
+      console.log(req.params.id);
+      const result = await craftCollection.findOne({
+        _id: new ObjectId(req.params.id),
+      });
+      res.send(result);
+    });
+
+    app.put("/updateCraft/:id", async (req, res) => {
+      console.log(req.params.id);
+      const query = { _id: new ObjectId(req.params.id) };
+      const data = {
+        $set: {
+          price: req.body.price,
+        },
+      };
+      const result = await craftCollection.updateOne(query, data);
+      console.log(result);
+      res.send(result);
+    });
+
     // user section
     app.get("/user", async (req, res) => {
       const cursor = userCollection.find();
