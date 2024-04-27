@@ -65,10 +65,26 @@ async function run() {
       const query = { _id: new ObjectId(req.params.id) };
       const data = {
         $set: {
+          photo: req.body.photo,
+          itemName: req.body.itemName,
+          subCategoryName: req.body.subCategoryName,
+          shortDescription: req.body.shortDescription,
           price: req.body.price,
+          rating: req.body.rating,
+          customization: req.body.customization,
+          processingTime: req.body.processingTime,
+          stockStatus: req.body.stockStatus,
         },
       };
       const result = await craftCollection.updateOne(query, data);
+      console.log(result);
+      res.send(result);
+    });
+
+    app.delete("/delete/:id", async (req, res) => {
+      const result = await craftCollection.deleteOne({
+        _id: new ObjectId(req.params.id),
+      });
       console.log(result);
       res.send(result);
     });
