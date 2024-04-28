@@ -89,6 +89,13 @@ async function run() {
       res.send(result);
     });
 
+    app.get("/viewDetails/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await craftCollection.findOne(query);
+      res.send(result);
+    });
+
     // user section
     app.get("/user", async (req, res) => {
       const cursor = userCollection.find();
@@ -116,7 +123,7 @@ async function run() {
 run().catch(console.dir);
 
 app.get("/", (req, res) => {
-  res.send("Hello World bhai ganja khaba");
+  res.send("Hello World bhaia");
 });
 
 app.listen(port, () => {
