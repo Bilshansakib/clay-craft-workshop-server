@@ -7,8 +7,22 @@ const app = express();
 const port = process.env.PORT || 5000;
 
 // middleware
-app.use(cors());
+app.use(
+  cors({
+    origin: [
+      "http://localhost:5173",
+      "http://localhost:5000",
+      "https://clay-craft-workshop.web.app",
+      "https://prctice-1.vercel.app",
+    ],
+  })
+);
 app.use(express.json());
+
+// app.use((req, res, next) => {
+//   res.header({ "Access-Control-Allow-Origin": "*" });
+//   next();
+// });
 // practice-1-project
 // gpng6yWmJzBOapZn
 // WnLXayNIZN8Bkdzl
@@ -29,7 +43,7 @@ const client = new MongoClient(uri, {
 async function run() {
   try {
     // Connect the client to the server	(optional starting in v4.7)
-    await client.connect();
+    // await client.connect();
     const craftCollection = client.db("craftDB").collection("craft");
     const userCollection = client.db("craftDB").collection("user");
 
@@ -109,6 +123,8 @@ async function run() {
       const result = await userCollection.insertOne(user);
       res.send(result);
     });
+
+    // sort
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
